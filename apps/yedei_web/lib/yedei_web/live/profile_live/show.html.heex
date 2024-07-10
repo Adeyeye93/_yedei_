@@ -1,0 +1,33 @@
+<.header>
+  Profile <%= @profile.id %>
+  <:subtitle>This is a profile record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/profiles/#{@profile}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit profile</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="First name"><%= @profile.first_name %></:item>
+  <:item title="Last name"><%= @profile.last_name %></:item>
+  <:item title="Pp url"><%= @profile.pp_url %></:item>
+  <:item title="Bio"><%= @profile.bio %></:item>
+  <:item title="Website url"><%= @profile.website_url %></:item>
+  <:item title="Is verified"><%= @profile.is_verified %></:item>
+  <:item title="Status"><%= @profile.status %></:item>
+  <:item title="Profile stat"><%= @profile.profile_stat %></:item>
+</.list>
+
+<.back navigate={~p"/profiles"}>Back to profiles</.back>
+
+<.modal :if={@live_action == :edit} id="profile-modal" show on_cancel={JS.patch(~p"/profiles/#{@profile}")}>
+  <.live_component
+    module={YedeiWeb.ProfileLive.FormComponent}
+    id={@profile.id}
+    title={@page_title}
+    action={@live_action}
+    profile={@profile}
+    patch={~p"/profiles/#{@profile}"}
+  />
+</.modal>

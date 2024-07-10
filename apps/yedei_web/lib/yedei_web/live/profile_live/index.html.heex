@@ -1,0 +1,48 @@
+<.header>
+  Listing Profiles
+  <:actions>
+    <.link patch={~p"/profiles/new"}>
+      <.button>New Profile</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table
+  id="profiles"
+  rows={@streams.profiles}
+  row_click={fn {_id, profile} -> JS.navigate(~p"/profiles/#{profile}") end}
+>
+  <:col :let={{_id, profile}} label="First name"><%= profile.first_name %></:col>
+  <:col :let={{_id, profile}} label="Last name"><%= profile.last_name %></:col>
+  <:col :let={{_id, profile}} label="Pp url"><%= profile.pp_url %></:col>
+  <:col :let={{_id, profile}} label="Bio"><%= profile.bio %></:col>
+  <:col :let={{_id, profile}} label="Website url"><%= profile.website_url %></:col>
+  <:col :let={{_id, profile}} label="Is verified"><%= profile.is_verified %></:col>
+  <:col :let={{_id, profile}} label="Status"><%= profile.status %></:col>
+  <:col :let={{_id, profile}} label="Profile stat"><%= profile.profile_stat %></:col>
+  <:action :let={{_id, profile}}>
+    <div class="sr-only">
+      <.link navigate={~p"/profiles/#{profile}"}>Show</.link>
+    </div>
+    <.link patch={~p"/profiles/#{profile}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={{id, profile}}>
+    <.link
+      phx-click={JS.push("delete", value: %{id: profile.id}) |> hide("##{id}")}
+      data-confirm="Are you sure?"
+    >
+      Delete
+    </.link>
+  </:action>
+</.table>
+
+<.modal :if={@live_action in [:new, :edit]} id="profile-modal" show on_cancel={JS.patch(~p"/profiles")}>
+  <.live_component
+    module={YedeiWeb.ProfileLive.FormComponent}
+    id={@profile.id || :new}
+    title={@page_title}
+    action={@live_action}
+    profile={@profile}
+    patch={~p"/profiles"}
+  />
+</.modal>

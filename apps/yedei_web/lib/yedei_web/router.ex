@@ -23,7 +23,7 @@ defmodule YedeiWeb.Router do
     live_session :browser do
       live "/", LivePage.HomeLive, :home
       live "/register", LivePage.HomeLive, :register
-      live "login", LivePage.HomeLive, :login
+      live "/login", LivePage.HomeLive, :login
     end
   end
 
@@ -72,6 +72,12 @@ defmodule YedeiWeb.Router do
       on_mount: [{YedeiWeb.UserAuth, :ensure_authenticated}] do
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email
+      live "/profiles", ProfileLive.Index, :index
+      live "/profiles/new", ProfileLive.Index, :new
+      live "/profiles/:id/edit", ProfileLive.Index, :edit
+
+      live "/profiles/:id", ProfileLive.Show, :show
+      live "/profiles/:id/show/edit", ProfileLive.Show, :edit
     end
   end
 
